@@ -1,0 +1,55 @@
+.button {
+  display: flex;
+  align-items: center;
+  min-width: 165px;
+  min-height: 46px;
+  padding-left: 31px;
+  border: none;
+  border-radius: 8px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  color: #ffffff;
+  
+  transition: var(--animation);
+  cursor: pointer;
+}
+
+.button svg {
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+.button:hover {
+  background-color: var(--btn-hover-color);
+}
+
+.button:active,
+.button:focus {
+  background-color: var(--btn-active-color);
+  outline: none;
+}
+
+.button--clear {
+  background-color: var(--red);
+}
+
+.button--clear:hover {
+  background-color: var(--btn-clear-hover-color);
+}
+
+.button--clear:active,
+.button--clear:focus {
+  background-color: var(--btn-clear-active-color);
+}
+
+.button--clear:disabled {
+  background-color: var(--light-gray);
+  cursor: initial;
+}
+
+.button span {
+  position: relative;
+  top: 1px;
+}

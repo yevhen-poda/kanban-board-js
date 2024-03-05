@@ -1,0 +1,29 @@
+.board-app {
+  height: auto;
+}
+
+.board-app__inner {
+  display: flex;
+  flex-direction: column;
+  width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.board-app__inner h1 {
+  font-size: 32px;
+}
+
+.board-app__header {
+  padding: 24px 0;
+  padding-bottom: 20px;
+  color: #ffffff;
+  background-color: var(--main-blue);
+}
+
+.board-app__main {
+  min-height: calc(100vh - 80px);
+  padding: 48px 0;
+  background-color: var(--main-bg);
+}
