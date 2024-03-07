@@ -1,3 +1,1 @@
-# Kanban-Board
-
-Dieses Projekt beinhaltet die Hauptfunktionalität eines klassischen 'Kanban-Boards', implementiert in native JavaScript.
+This project includes the main functionality of a classic 'Kanban board', implemented in native JavaScript.
