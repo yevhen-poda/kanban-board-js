@@ -1,4 +1,4 @@
-import { InsertPosition } from './constans.js'
+import { InsertPosition } from './constants.js'
 
 export function createElement(template) {
   const element = document.createElement('div')

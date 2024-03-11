@@ -1,4 +1,4 @@
-import { InsertPosition, Text } from '../constans.js'
+import { InsertPosition, Text } from '../constants.js'
 import { renderElement } from '../utils.js'
 import AbstractComponent from './abstract-component.js'
 import FormComponent from './form-component.js'
@@ -20,6 +20,10 @@ export default class AddTaskComponent extends AbstractComponent {
   _afterCreateElement() {
     this._formComponennt = new FormComponent(this._taskService, Text.NEW_TASK)
 
-    renderElement(this.getElement(), this._formComponennt.getElement(), InsertPosition.BEFORE_END)
+    renderElement(
+      this.getElement(),
+      this._formComponennt.getElement(),
+      InsertPosition.BEFORE_END
+    )
   }
 }

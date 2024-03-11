@@ -1,4 +1,4 @@
-import { MIN_TITLE_LENGTH } from '../constans.js'
+import { MIN_TITLE_LENGTH } from '../constants.js'
 import AbstractComponent from './abstract-component.js'
 
 export default class FormComponent extends AbstractComponent {
