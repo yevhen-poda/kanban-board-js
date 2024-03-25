@@ -14,8 +14,7 @@ export default class App {
   init(name) {
     const headerComponent = new HeaderComponent(name)
     const headerElement = headerComponent.getElement()
-    console.log(headerComponent)
-    console.log(headerElement)
+
     const bodyElement = document.querySelector('body.board-app')
 
     renderElement(bodyElement, headerElement, InsertPosition.AFTER_BEGIN)

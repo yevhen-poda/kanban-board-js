@@ -1,4 +1,4 @@
-import { InsertPosition, StatusLabel } from '../constants.js'
+import { InsertPosition, StateActions, StatusLabel } from '../constants.js'
 import AbstractComponent from './abstract-component.js'
 import TaskComponent from './task-component.js'
 import { renderElement } from '../utils.js'
@@ -22,10 +22,21 @@ export default class ListComponent extends AbstractComponent {
   }
 
   _afterCreateElement() {
+    this._addEventListeners()
     this._renderTasks()
   }
 
+  _addEventListeners() {
+    window.addEventListener(StateActions.TASK_CREATE, this._changeDataHandler.bind(this))
+    window.addEventListener(StateActions.TASK_UPDATE_TITLE, this._changeDataHandler.bind(this))
+    window.addEventListener(StateActions.TASK_UPDATE_POSITION, this._changeDataHandler.bind(this))
+    window.addEventListener(StateActions.TASK_DELETE, this._changeDataHandler.bind(this))
+    window.addEventListener(StateActions.BASKET_CLEANUP, this._changeDataHandler.bind(this))
+  }
+
   _renderTasks() {
+    this._removeTasks()
+
     this._tasks.forEach(task => {
       const taskItemComponent = new TaskComponent(this._taskService, task)
       const taskItemElement = taskItemComponent.getElement()
@@ -36,5 +47,14 @@ export default class ListComponent extends AbstractComponent {
         InsertPosition.BEFORE_END
       )
     })
+  }
+
+  _changeDataHandler() {
+    this._tasks = this._taskService.getByStatus(this._status)
+    this._renderTasks()
+  }
+
+  _removeTasks() {
+    this.getElement().querySelector('.taskboard__list').innerHTML = ''
   }
 }

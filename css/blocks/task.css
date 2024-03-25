@@ -128,7 +128,7 @@
   display: none;
 }
 
-.task__input {
+.task--input {
   display: none;
   width: 100%;
   height: 24px;
@@ -139,20 +139,20 @@
   transition: var(--animation);
 }
 
-.task__input:active,
-.task__input:focus {
+.task--input:active,
+.task--input:focus {
   border-color: var(--input-border-active-color);
   outline: none;
 }
 
-.task__view {
+.task--view {
   padding: 2px 0;
 }
 
-.task--active .task__view {
+.task--active .task--view {
   display: none;
 }
 
-.task--active .task__input {
+.task--active .task--input {
   display: block;
 }
