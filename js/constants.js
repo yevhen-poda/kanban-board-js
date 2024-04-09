@@ -7,7 +7,7 @@ export const InsertPosition = {
 
 export const Text = {
   NEW_TASK: 'Neue Aufgabe',
-  EMPTY_TASK: 'Ziehen Sie die Karte',
+  EMPTY_TASK: 'Ziehen Sie eine Aufgabe',
   EMPTY_BASKET: 'Papierkorb ist leer',
 }
 
@@ -43,3 +43,5 @@ export const Key = {
 }
 
 export const HIDE_BLOCK_CLASS = 'hidden-block'
+
+export const STATE_EMPTY = 'empty'

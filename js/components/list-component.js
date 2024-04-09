@@ -1,7 +1,9 @@
-import { InsertPosition, StateActions, StatusLabel } from '../constants.js'
+import { InsertPosition, STATE_EMPTY, StateActions, Status, StatusLabel, Text } from '../constants.js'
 import AbstractComponent from './abstract-component.js'
 import TaskComponent from './task-component.js'
-import { renderElement } from '../utils.js'
+import { renderElement, setElementVisibility } from '../utils.js'
+import BasketCleanerComponent from './basket-cleaner-component.js'
+import EmptyItemComponent from './empty-item-component.js'
 
 export default class ListComponent extends AbstractComponent {
   constructor(taskService, status) {
@@ -23,6 +25,15 @@ export default class ListComponent extends AbstractComponent {
 
   _afterCreateElement() {
     this._addEventListeners()
+    this._makeListDroppable()
+
+    if (this._status === Status.BASKET) {
+      const basketCleanerComponent = new BasketCleanerComponent(this._taskService)
+      const basketCleanerElement = basketCleanerComponent.getElement()
+
+      renderElement(this.getElement(), basketCleanerElement, InsertPosition.BEFORE_END)
+    }
+
     this._renderTasks()
   }
 
@@ -32,6 +43,13 @@ export default class ListComponent extends AbstractComponent {
     window.addEventListener(StateActions.TASK_UPDATE_POSITION, this._changeDataHandler.bind(this))
     window.addEventListener(StateActions.TASK_DELETE, this._changeDataHandler.bind(this))
     window.addEventListener(StateActions.BASKET_CLEANUP, this._changeDataHandler.bind(this))
+    window.addEventListener(StateActions.ELEMENT_DRAGOVER, this._elementDragoverHandler.bind(this))
+  }
+
+  _makeListDroppable() {
+    const listElement = this._element.querySelector('div.taskboard__list')
+
+    listElement.addEventListener('dragover', this._dragoverHandler.bind(this, listElement))
   }
 
   _renderTasks() {
@@ -47,6 +65,8 @@ export default class ListComponent extends AbstractComponent {
         InsertPosition.BEFORE_END
       )
     })
+
+    this._renderEmptyComponent((this._status === Status.BASKET) ? Text.EMPTY_BASKET : Text.EMPTY_TASK)
   }
 
   _changeDataHandler() {
@@ -56,5 +76,68 @@ export default class ListComponent extends AbstractComponent {
 
   _removeTasks() {
     this.getElement().querySelector('.taskboard__list').innerHTML = ''
+  }
+
+  _renderEmptyComponent(title) {
+    const emptyItemComponent = new EmptyItemComponent(title, this._status, STATE_EMPTY)
+    const emptyItemElement = emptyItemComponent.getElement()
+
+    setElementVisibility(emptyItemElement, this._tasks.length === 0)
+    renderElement(
+      this.getElement().querySelector('.taskboard__list'),
+      emptyItemElement,
+      InsertPosition.BEFORE_END
+    )
+  }
+
+  _elementDragoverHandler() {
+    const draggedElement = this._taskService.getDraggedElement()
+    const isEmpty = this._tasks.length === 0
+    const draggedElementStatus = this._extractStatus(draggedElement)
+    const isOneMovedElement = (this._tasks.length === 1) && (draggedElementStatus === this._status)
+
+    if (isEmpty || isOneMovedElement) {
+      const emptyElement = this.getElement().querySelector(`.task--${STATE_EMPTY}`)
+
+      setElementVisibility(emptyElement, this._status !== draggedElement.dataset.status)
+    }
+  }
+
+  _dragoverHandler(container, event) {
+    event.preventDefault()
+
+    const elementUnder = event.target
+    const draggedElement = this._taskService.getDraggedElement()
+
+    if (elementUnder === draggedElement) {
+      return
+    }
+
+    if (elementUnder.classList.contains('task')) {
+      renderElement(
+        container,
+        draggedElement,
+        InsertPosition.BEFORE_BEGIN,
+        elementUnder === draggedElement.nextElementSibling ? elementUnder.nextElementSibling : elementUnder
+      )
+
+      draggedElement.dataset.status = this._extractStatus(elementUnder)
+
+      this._taskService.elementDragover();
+    }
+  }
+
+  _extractStatus(element) {
+    if (element.classList.contains('task--backlog')) {
+      return Status.BACKLOG
+    } else if (element.classList.contains('task--processing')) {
+      return Status.PROCESSING
+    } else if (element.classList.contains('task--done')) {
+      return Status.DONE
+    } else if (element.classList.contains('task--basket')) {
+      return Status.BASKET
+    }
+
+    return Status.BACKLOG
   }
 }

@@ -10,7 +10,8 @@ export function createElement(template) {
 export function renderElement(
   container,
   element,
-  insertPosition = InsertPosition.BEFORE_END
+  insertPosition = InsertPosition.BEFORE_END,
+  referenceElement = undefined
 ) {
   switch (insertPosition) {
     case InsertPosition.BEFORE_END:
@@ -20,7 +21,7 @@ export function renderElement(
       container.prepend(element)
       break
     case InsertPosition.BEFORE_BEGIN:
-      container.insertBefore(element)
+      container.insertBefore(element, referenceElement)
       break
   }
 }
